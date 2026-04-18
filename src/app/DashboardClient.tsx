@@ -18,24 +18,24 @@ export function DashboardClient({ stats, contacts }: { stats: any; contacts: any
   const [isDealModalOpen, setIsDealModalOpen] = useState(false);
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 md:space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-black tracking-tighter">Dashboard</h1>
-          <p className="text-slate-500 font-semibold">Welcome back, here is what's happening today.</p>
+          <h1 className="text-2xl md:text-3xl font-black tracking-tighter">Dashboard</h1>
+          <p className="text-slate-500 font-semibold text-sm md:text-base">Welcome back, here is what's happening today.</p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-2 md:gap-3">
             <button 
                 onClick={() => setIsContactModalOpen(true)}
-                className="flex items-center gap-2 rounded-xl border border-slate-200 px-6 py-3 text-sm font-bold bg-white hover:bg-slate-50 transition-all dark:bg-slate-900 dark:border-slate-800"
+                className="flex-1 sm:flex-none flex items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 md:px-6 py-2.5 md:py-3 text-xs md:text-sm font-bold bg-white hover:bg-slate-50 transition-all dark:bg-slate-900 dark:border-slate-800 shadow-sm"
             >
-                <Plus size={18} /> New Contact
+                <Plus size={16} className="md:w-[18px] md:h-[18px]" /> Contact
             </button>
             <button 
                 onClick={() => setIsDealModalOpen(true)}
-                className="flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-white shadow-lg shadow-primary/20 hover:scale-105 transition-all"
+                className="flex-1 sm:flex-none flex items-center justify-center gap-2 rounded-xl bg-primary px-4 md:px-6 py-2.5 md:py-3 text-xs md:text-sm font-bold text-white shadow-lg shadow-primary/20 hover:scale-105 transition-all"
             >
-                <Plus size={18} /> New Deal
+                <Plus size={16} className="md:w-[18px] md:h-[18px]" /> New Deal
             </button>
         </div>
       </div>

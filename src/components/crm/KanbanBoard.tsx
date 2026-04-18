@@ -26,30 +26,30 @@ export function KanbanBoard({ initialDeals, contacts }: { initialDeals: any[]; c
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-black tracking-tighter">Negotiations</h1>
-          <p className="text-slate-500 font-semibold">Track your sales pipeline and move deals to closing.</p>
+          <h1 className="text-2xl md:text-3xl font-black tracking-tighter">Negotiations</h1>
+          <p className="hidden md:block text-slate-500 font-semibold">Track your sales pipeline and move deals to closing.</p>
         </div>
-        <div className="flex items-center gap-3">
-          <button className="flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-bold hover:bg-slate-50 transition-all dark:border-slate-800">
-            <Filter size={16} /> Filters
+        <div className="flex items-center gap-2 md:gap-3 overflow-x-auto pb-2 md:pb-0 no-scrollbar">
+          <button className="flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-bold hover:bg-slate-50 transition-all dark:border-slate-800 whitespace-nowrap">
+            <Filter size={14} /> Filters
           </button>
-          <button className="flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-bold hover:bg-slate-50 transition-all dark:border-slate-800">
-            <Download size={16} /> Export
+          <button className="flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-bold hover:bg-slate-50 transition-all dark:border-slate-800 whitespace-nowrap">
+            <Download size={14} /> Export
           </button>
           <button 
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-2 rounded-xl bg-primary px-6 py-2 text-sm font-bold text-white shadow-lg shadow-primary/20 hover:scale-105 transition-all"
+            className="flex items-center gap-2 rounded-xl bg-primary px-4 md:px-6 py-2 text-xs font-bold text-white shadow-lg shadow-primary/20 hover:scale-105 transition-all whitespace-nowrap ml-auto"
           >
-            <Plus size={16} /> New Deal
+            <Plus size={14} /> New Deal
           </button>
         </div>
       </div>
 
-      <div className="flex gap-6 overflow-x-auto pb-6 -mx-8 px-8 h-[calc(100vh-250px)]">
+      <div className="flex gap-4 md:gap-6 overflow-x-auto pb-6 -mx-4 px-4 md:-mx-8 md:px-8 h-[calc(100vh-280px)] md:h-[calc(100vh-250px)] no-scrollbar">
         {stages.map((stage) => (
           <div key={stage.id} className="flex-shrink-0 w-80 flex flex-col gap-4">
             <div className="flex items-center justify-between px-2">

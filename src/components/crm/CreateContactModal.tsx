@@ -40,11 +40,11 @@ export function CreateContactModal({ isOpen, onClose }: Props) {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={onClose} />
       
-      <div className="glass-card relative w-full max-w-lg p-8 rounded-3xl animate-in fade-in zoom-in duration-200">
-        <div className="flex items-center justify-between mb-8">
+      <div className="glass-card relative w-full max-w-lg p-6 md:p-8 rounded-2xl md:rounded-3xl animate-in fade-in zoom-in duration-200 max-h-[95vh] overflow-y-auto no-scrollbar">
+        <div className="flex items-center justify-between mb-6 md:mb-8">
           <div>
-            <h2 className="text-2xl font-black tracking-tighter">Create Contact</h2>
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest">Add a new person to your CRM</p>
+            <h2 className="text-xl md:text-2xl font-black tracking-tighter">Create Contact</h2>
+            <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">Add a new person to your CRM</p>
           </div>
           <button onClick={onClose} className="rounded-full p-2 hover:bg-slate-100 transition-colors">
             <X size={20} />
