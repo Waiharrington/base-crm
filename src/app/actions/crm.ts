@@ -87,6 +87,24 @@ export async function updateDealStage(id: string, stage: string) {
   return data;
 }
 
+export async function createDeal(formData: { title: string; value: number; contact_id?: string; stage: string; priority: string }) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("deals")
+    .insert([formData])
+    .select()
+    .single();
+
+  if (error) throw error;
+  
+  if (data.contact_id) {
+    await createActivity(data.contact_id, "system", "New Deal Created", `Created deal: ${data.title}`);
+  }
+  
+  revalidatePath("/deals");
+  return data;
+}
+
 // --- ACTIVITIES ---
 
 export async function createActivity(contact_id: string, type: string, title: string, content: string) {

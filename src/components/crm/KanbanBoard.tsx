@@ -1,19 +1,21 @@
 "use client";
 
 import React, { useState } from "react";
-import { Plus, MoreHorizontal, DollarSign, Clock } from "lucide-react";
+import { Plus, MoreHorizontal, DollarSign, Clock, Filter, Download } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CRM_CONFIG } from "@/lib/constants/config";
 import { updateDealStage } from "@/app/actions/crm";
+import { CreateDealModal } from "./CreateDealModal";
 
-export function KanbanBoard({ initialDeals }: { initialDeals: any[] }) {
+export function KanbanBoard({ initialDeals, contacts }: { initialDeals: any[]; contacts: any[] }) {
   const [deals, setDeals] = useState(initialDeals);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const stages = CRM_CONFIG.pipeline;
 
   const handleStageChange = async (dealId: string, newStage: string) => {
     // Optimistic update
     const previousDeals = [...deals];
-    setDeals(deals.map(d => d.id === dealId ? { ...d, stage: newStage } : d));
+    setDeals(deals.map((d: any) => d.id === dealId ? { ...d, stage: newStage } : d));
 
     try {
       await updateDealStage(dealId, newStage);
@@ -24,37 +26,58 @@ export function KanbanBoard({ initialDeals }: { initialDeals: any[] }) {
   };
 
   return (
-    <div className="flex gap-6 overflow-x-auto pb-6 -mx-8 px-8 h-[calc(100vh-200px)]">
-      {stages.map((stage) => (
-        <div key={stage.id} className="flex-shrink-0 w-80 flex flex-col gap-4">
-          {/* Stage Header */}
-          <div className="flex items-center justify-between px-2">
-            <div className="flex items-center gap-2">
-              <div className={cn("h-2 w-2 rounded-full", stage.color)} />
-              <h3 className="text-sm font-black uppercase tracking-widest">{stage.name}</h3>
-              <span className="text-[10px] font-black text-slate-400 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">
-                {deals.filter((d: any) => d.stage === stage.id).length}
-              </span>
-            </div>
-            <button className="text-slate-400 hover:text-primary transition-colors">
-              <Plus size={18} />
-            </button>
-          </div>
-
-          {/* Cards Container */}
-          <div className="flex-1 space-y-3 p-2 rounded-2xl bg-slate-50/50 dark:bg-slate-900/30 border border-dashed border-slate-200 dark:border-slate-800 overflow-y-auto">
-            {deals
-              .filter((deal: any) => deal.stage === stage.id)
-              .map((deal: any) => (
-                <KanbanCard key={deal.id} deal={deal} />
-              ))}
-            
-            <button className="w-full py-3 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 text-[10px] font-black uppercase text-slate-400 hover:border-primary hover:text-primary transition-all">
-              + Add Deal
-            </button>
-          </div>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-black tracking-tighter">Negotiations</h1>
+          <p className="text-slate-500 font-semibold">Track your sales pipeline and move deals to closing.</p>
         </div>
-      ))}
+        <div className="flex items-center gap-3">
+          <button className="flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-bold hover:bg-slate-50 transition-all dark:border-slate-800">
+            <Filter size={16} /> Filters
+          </button>
+          <button className="flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-bold hover:bg-slate-50 transition-all dark:border-slate-800">
+            <Download size={16} /> Export
+          </button>
+          <button 
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center gap-2 rounded-xl bg-primary px-6 py-2 text-sm font-bold text-white shadow-lg shadow-primary/20 hover:scale-105 transition-all"
+          >
+            <Plus size={16} /> New Deal
+          </button>
+        </div>
+      </div>
+
+      <div className="flex gap-6 overflow-x-auto pb-6 -mx-8 px-8 h-[calc(100vh-250px)]">
+        {stages.map((stage) => (
+          <div key={stage.id} className="flex-shrink-0 w-80 flex flex-col gap-4">
+            <div className="flex items-center justify-between px-2">
+              <div className="flex items-center gap-2">
+                <div className={cn("h-2 w-2 rounded-full", stage.color)} />
+                <h3 className="text-sm font-black uppercase tracking-widest">{stage.name}</h3>
+                <span className="text-[10px] font-black text-slate-400 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">
+                  {deals.filter((d: any) => d.stage === stage.id).length}
+                </span>
+              </div>
+            </div>
+
+            <div className="flex-1 space-y-3 p-2 rounded-2xl bg-slate-50/50 dark:bg-slate-900/30 border border-dashed border-slate-200 dark:border-slate-800 overflow-y-auto">
+              {deals
+                .filter((deal: any) => deal.stage === stage.id)
+                .map((deal: any) => (
+                  <KanbanCard key={deal.id} deal={deal} />
+                ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <CreateDealModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        contacts={contacts}
+      />
     </div>
   );
 }
@@ -69,16 +92,16 @@ function KanbanCard({ deal }: any) {
         </button>
       </div>
       
-      <p className="text-[10px] font-black uppercase text-slate-400 mb-4">{deal.customer}</p>
+      <p className="text-[10px] font-black uppercase text-slate-400 mb-4">{deal.contacts?.first_name} {deal.contacts?.last_name}</p>
       
       <div className="flex items-center justify-between pt-3 border-t">
         <div className="flex items-center gap-1 text-xs font-black">
           <DollarSign size={12} className="text-success" />
-          {deal.value}
+          {deal.value?.toLocaleString()}
         </div>
         <div className="flex items-center gap-1 text-[10px] font-bold text-slate-400 uppercase">
           <Clock size={12} />
-          2d left
+          {new Date(deal.created_at).toLocaleDateString()}
         </div>
       </div>
 
