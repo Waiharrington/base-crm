@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { 
   Phone, 
@@ -14,20 +12,37 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export function EntityProfile() {
+export function EntityProfile({ contact }: { contact: any }) {
+  const { 
+    first_name, 
+    last_name, 
+    email, 
+    phone, 
+    company, 
+    status, 
+    notes, 
+    activities = [], 
+    deals = [] 
+  } = contact;
+
   return (
     <div className="flex flex-col gap-6">
       {/* Header Info */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary text-2xl font-black">
-            JD
+            {first_name[0]}{last_name?.[0]}
           </div>
           <div>
-            <h1 className="text-3xl font-black tracking-tight">John Doe</h1>
+            <h1 className="text-3xl font-black tracking-tight">{first_name} {last_name}</h1>
             <div className="flex items-center gap-2 mt-1">
-              <span className="rounded-full bg-success/10 px-2.5 py-0.5 text-[10px] font-black uppercase text-success">Active</span>
-              <span className="text-sm font-semibold text-slate-400">Lead • Corporate Client</span>
+              <span className={cn(
+                "rounded-full px-2.5 py-0.5 text-[10px] font-black uppercase",
+                status === 'Active' ? "bg-success/10 text-success" : "bg-slate-100 text-slate-400"
+              )}>
+                {status}
+              </span>
+              <span className="text-sm font-semibold text-slate-400">Contact • {company}</span>
             </div>
           </div>
         </div>
@@ -36,7 +51,7 @@ export function EntityProfile() {
           <button className="flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-bold hover:bg-slate-50 transition-all">
             <MessageSquare size={16} /> Send Message
           </button>
-          <button className="flex items-center gap-2 rounded-xl bg-primary px-6 py-2 text-sm font-bold text-white shadow-lg shadow-primary/20 hover:scale-105 transition-all">
+          <button className="flex items-center gap-2 rounded-xl bg-primary px-6 py-2 text-sm font-bold text-white shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all">
             <Plus size={16} /> New Deal
           </button>
         </div>
@@ -50,20 +65,18 @@ export function EntityProfile() {
           <section className="glass-card p-6 rounded-2xl">
             <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 mb-4">Contact Details</h3>
             <div className="space-y-4">
-              <DetailItem icon={Mail} label="Email" value="john.doe@enterprise.com" />
-              <DetailItem icon={Phone} label="Phone" value="+1 (555) 000-1234" />
-              <DetailItem icon={Building2} label="Company" value="Enterprise Corp" />
-              <DetailItem icon={MapPin} label="Location" value="New York, USA" />
+              <DetailItem icon={Mail} label="Email" value={email || "No email"} />
+              <DetailItem icon={Phone} label="Phone" value={phone || "No phone"} />
+              <DetailItem icon={Building2} label="Company" value={company || "N/A"} />
+              <DetailItem icon={MapPin} label="Location" value="Not set" />
             </div>
           </section>
 
           <section className="glass-card p-6 rounded-2xl">
-            <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 mb-4">Tags</h3>
-            <div className="flex flex-wrap gap-2">
-              <Tag color="primary">High Priority</Tag>
-              <Tag color="accent">Q4 Prospect</Tag>
-              <Tag color="success">Verified</Tag>
-            </div>
+            <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 mb-4">Internal Notes</h3>
+            <p className="text-xs text-slate-600 dark:text-slate-400 font-medium leading-relaxed">
+              {notes || "No notes for this contact yet."}
+            </p>
           </section>
         </div>
 
@@ -73,35 +86,25 @@ export function EntityProfile() {
             <Tab active>Timeline</Tab>
             <Tab>Tasks</Tab>
             <Tab>Emails</Tab>
-            <Tab>Calls</Tab>
           </div>
 
           <div className="relative pl-8 space-y-8">
             <div className="timeline-line" />
             
-            <TimelineItem 
-              icon={Plus} 
-              title="New Lead Created" 
-              time="2 hours ago" 
-              content="Lead was automatically imported from Website Form." 
-              type="system"
-            />
-            
-            <TimelineItem 
-              icon={MessageSquare} 
-              title="Note added by Admin" 
-              time="1 hour ago" 
-              content="Client is interested in the Enterprise plan. Requested a demo for next Tuesday." 
-              type="manual"
-            />
+            {activities.length === 0 && (
+              <p className="text-center text-xs text-slate-400 py-10 font-bold uppercase tracking-widest">No activities recorded</p>
+            )}
 
-            <TimelineItem 
-               icon={Briefcase} 
-               title="Status changed to 'Negotiation'" 
-               time="30 mins ago" 
-               content="The deal pipeline stage has been updated." 
-               type="status"
-            />
+            {activities.map((activity: any) => (
+              <TimelineItem 
+                key={activity.id}
+                icon={activity.type === 'system' ? Plus : MessageSquare} 
+                title={activity.title} 
+                time={new Date(activity.created_at).toLocaleDateString()} 
+                content={activity.content} 
+                type={activity.type}
+              />
+            ))}
           </div>
         </div>
 
@@ -110,23 +113,18 @@ export function EntityProfile() {
           <section className="glass-card p-6 rounded-2xl">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xs font-black uppercase tracking-widest text-slate-400">Open Deals</h3>
-              <span className="text-primary font-bold text-xs">2 Deals</span>
+              <span className="text-primary font-bold text-xs">{deals.length} Deals</span>
             </div>
             <div className="space-y-3">
-              <DealCard title="Cloud Migration" value="$12,000" status="Negotiation" />
-              <DealCard title="Security Audit" value="$4,500" status="Discovery" />
-            </div>
-          </section>
-
-          <section className="glass-card p-6 rounded-2xl">
-            <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 mb-4">Documents</h3>
-            <div className="space-y-3">
-              <DocumentItem name="proposal_v1.pdf" size="1.2 MB" />
-              <DocumentItem name="contract_draft.docx" size="450 KB" />
+              {deals.map((deal: any) => (
+                <DealCard key={deal.id} title={deal.title} value={`$${deal.value}`} status={deal.stage} />
+              ))}
+              {deals.length === 0 && (
+                <p className="text-center text-[10px] font-black uppercase text-slate-400 py-4 border border-dashed rounded-xl">No active deals</p>
+              )}
             </div>
           </section>
         </div>
-
       </div>
     </div>
   );

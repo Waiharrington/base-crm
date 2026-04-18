@@ -1,14 +1,11 @@
 import { Users, Plus, Search, Filter, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { getContacts } from "@/app/actions/crm";
 
-const contacts = [
-  { id: "1", name: "John Doe", company: "Enterprise Corp", email: "john@enterprise.com", phone: "+1 555-0101", status: "Active" },
-  { id: "2", name: "Sarah Smith", company: "BioTech", email: "sarah@biotech.io", phone: "+1 555-0202", status: "Lead" },
-  { id: "3", name: "Robert Brown", company: "Global Log", email: "robert@global.com", phone: "+1 555-0303", status: "Inactive" },
-];
+export default async function ContactsPage() {
+  const contacts = await getContacts();
 
-export default function ContactsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">

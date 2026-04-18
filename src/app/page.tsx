@@ -7,8 +7,11 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { DashboardCharts } from "@/components/crm/DashboardCharts";
+import { getDashboardStats } from "@/app/actions/crm";
 
-export default function Home() {
+export default async function Home() {
+  const stats = await getDashboardStats();
+
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
@@ -23,10 +26,10 @@ export default function Home() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <StatCard icon={Users} label="Total Leads" value="1,284" change="+12.5%" positive />
-        <StatCard icon={Briefcase} label="Active Deals" value="43" change="+3.2%" positive />
-        <StatCard icon={TrendingUp} label="Revenue" value="$45,200" change="-2.1%" positive={false} />
-        <StatCard icon={Clock} label="Pending Tasks" value="18" valueColor="text-warning" />
+        <StatCard icon={Users} label="Total Contacts" value={stats.contacts.toString()} change="+0%" positive />
+        <StatCard icon={Briefcase} label="Active Deals" value={stats.deals.toString()} change="+0%" positive />
+        <StatCard icon={TrendingUp} label="Revenue" value={`$${stats.revenue.toLocaleString()}`} change="+0%" positive={true} />
+        <StatCard icon={Clock} label="Pending Tasks" value="0" valueColor="text-warning" />
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">

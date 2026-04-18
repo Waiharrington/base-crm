@@ -1,10 +1,18 @@
-"use client";
-
 import React, { useEffect, useState } from "react";
-import { Search, Bell, User, Sun, Moon } from "lucide-react";
+import { Search, Bell, User, Sun, Moon, LogOut } from "lucide-react";
+import { createClient } from "@/utils/supabase/client";
+import { useRouter } from "next/navigation";
 
 export function Header() {
   const [isDark, setIsDark] = useState(false);
+  const supabase = createClient();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push("/login");
+    router.refresh();
+  };
 
   useEffect(() => {
     const root = window.document.documentElement;
@@ -48,6 +56,13 @@ export function Header() {
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-white font-bold shadow-lg">
             AU
           </div>
+          <button 
+            onClick={handleLogout}
+            className="ml-2 rounded-full p-2 hover:bg-danger/10 hover:text-danger transition-colors text-slate-400"
+            title="Logout"
+          >
+            <LogOut size={20} />
+          </button>
         </div>
       </div>
     </header>

@@ -1,24 +1,26 @@
-"use client";
-
-import React from "react";
+import React, { useState } from "react";
 import { Plus, MoreHorizontal, DollarSign, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { CRM_CONFIG } from "@/lib/constants/config";
+import { updateDealStage } from "@/app/actions/crm";
 
-const stages = [
-  { id: "discovery", name: "Discovery", color: "bg-slate-400" },
-  { id: "negotiation", name: "Negotiation", color: "bg-primary" },
-  { id: "proposal", name: "Proposal Sent", color: "bg-accent" },
-  { id: "closed", name: "Won / Lost", color: "bg-success" },
-];
+export function KanbanBoard({ initialDeals }: { initialDeals: any[] }) {
+  const [deals, setDeals] = useState(initialDeals);
+  const stages = CRM_CONFIG.pipeline;
 
-const deals = [
-  { id: "1", title: "Enterprise Cloud Sync", value: "$12,500", customer: "Enterprise Corp", stage: "discovery", priority: "high" },
-  { id: "2", title: "Security Audit Phase 2", value: "$4,200", customer: "BioTech Solutions", stage: "negotiation", priority: "medium" },
-  { id: "3", title: "Global Licensing", value: "$85,000", customer: "World Trade Inc", stage: "negotiation", priority: "high" },
-  { id: "4", title: "Mobile App Dev", value: "$18,000", customer: "Startup X", stage: "proposal", priority: "low" },
-];
+  const handleStageChange = async (dealId: string, newStage: string) => {
+    // Optimistic update
+    const previousDeals = [...deals];
+    setDeals(deals.map(d => d.id === dealId ? { ...d, stage: newStage } : d));
 
-export function KanbanBoard() {
+    try {
+      await updateDealStage(dealId, newStage);
+    } catch (error) {
+      console.error("Failed to update deal stage:", error);
+      setDeals(previousDeals);
+    }
+  };
+
   return (
     <div className="flex gap-6 overflow-x-auto pb-6 -mx-8 px-8 h-[calc(100vh-200px)]">
       {stages.map((stage) => (
