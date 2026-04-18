@@ -33,7 +33,7 @@ export function KanbanBoard({ initialDeals }: { initialDeals: any[] }) {
               <div className={cn("h-2 w-2 rounded-full", stage.color)} />
               <h3 className="text-sm font-black uppercase tracking-widest">{stage.name}</h3>
               <span className="text-[10px] font-black text-slate-400 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">
-                {deals.filter(d => d.stage === stage.id).length}
+                {deals.filter((d: any) => d.stage === stage.id).length}
               </span>
             </div>
             <button className="text-slate-400 hover:text-primary transition-colors">
@@ -44,8 +44,8 @@ export function KanbanBoard({ initialDeals }: { initialDeals: any[] }) {
           {/* Cards Container */}
           <div className="flex-1 space-y-3 p-2 rounded-2xl bg-slate-50/50 dark:bg-slate-900/30 border border-dashed border-slate-200 dark:border-slate-800 overflow-y-auto">
             {deals
-              .filter((deal) => deal.stage === stage.id)
-              .map((deal) => (
+              .filter((deal: any) => deal.stage === stage.id)
+              .map((deal: any) => (
                 <KanbanCard key={deal.id} deal={deal} />
               ))}
             

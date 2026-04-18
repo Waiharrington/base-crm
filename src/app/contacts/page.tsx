@@ -40,14 +40,14 @@ export default async function ContactsPage() {
             </tr>
           </thead>
           <tbody className="divide-y">
-            {contacts.map((contact) => (
+            {contacts.map((contact: any) => (
               <tr key={contact.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-all cursor-pointer group">
                 <td className="px-6 py-4">
                   <Link href={`/contacts/${contact.id}`} className="flex items-center gap-3">
                     <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold">
-                      {contact.name.split(' ').map(n => n[0]).join('')}
+                      {contact.first_name[0]}{contact.last_name?.[0]}
                     </div>
-                    <span className="text-sm font-bold group-hover:text-primary transition-colors">{contact.name}</span>
+                    <span className="text-sm font-bold group-hover:text-primary transition-colors">{contact.first_name} {contact.last_name}</span>
                   </Link>
                 </td>
                 <td className="px-6 py-4 text-sm font-medium text-slate-600 dark:text-slate-400">{contact.company}</td>

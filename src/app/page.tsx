@@ -115,7 +115,7 @@ function ActivityItem({ title, desc, time, color }: any) {
   );
 }
 
-function QuickLink({ href, label }: any) {
+function QuickLink({ href, label }: { href: string; label: string }) {
   return (
     <a href={href} className="flex items-center justify-between p-3 rounded-xl border border-slate-100 bg-slate-50 hover:bg-white hover:shadow-sm hover:border-primary transition-all font-bold text-sm text-slate-700">
       {label}

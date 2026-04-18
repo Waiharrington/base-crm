@@ -36,7 +36,7 @@ export function DashboardCharts() {
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          {data.distribution.map((item) => (
+          {data.distribution.map((item: any) => (
             <div key={item.name} className="flex items-center gap-2">
               <div className={cn("h-3 w-3 rounded-full", item.color)} />
               <span className="text-[10px] font-black uppercase text-slate-500">{item.name} ({item.value}%)</span>
@@ -55,7 +55,7 @@ export function DashboardCharts() {
         </div>
 
         <div className="flex h-64 items-end justify-between gap-2 px-2">
-          {data.weekly.map((value, i) => (
+          {data.weekly.map((value: any, i: number) => (
             <div key={i} className="flex flex-1 flex-col items-center gap-3">
               <motion.div 
                 initial={{ height: 0 }}
